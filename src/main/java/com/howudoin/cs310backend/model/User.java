@@ -2,6 +2,7 @@
 
 package com.howudoin.cs310backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,11 +22,16 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+    @JsonIgnore
     private String passwordHash;
+    @JsonIgnore
     private List<String> friendList;
+    @JsonIgnore
     private List<String> pendingRequests;
+    @JsonIgnore
     private List<String> sentRequests;
     private Long createdAt;
+    @JsonIgnore
     private Long updatedAt;
 
 }

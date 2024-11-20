@@ -4,6 +4,7 @@ package com.howudoin.cs310backend.service;
 
 import com.howudoin.cs310backend.model.Message;
 import com.howudoin.cs310backend.repository.MessageRepository;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,10 @@ public class MessageService {
 
     @Autowired
     private MessageRepository messageRepository;
+
+    @Autowired
+    private UserService userService;
+
 
     public Message sendMessage(String senderId, String receiverId, String content, String messageType) {
         Message message = Message.builder()
@@ -41,5 +46,9 @@ public class MessageService {
     public List<Message> getGroupMessages(String groupId) {
         // Implement pagination as needed
         return messageRepository.findByReceiverIdOrderByTimestampAsc(groupId);
+    }
+
+    public boolean areFriends(String senderId, @NotBlank String recipientId) {
+        return userService.areFriends(senderId, recipientId);
     }
 }

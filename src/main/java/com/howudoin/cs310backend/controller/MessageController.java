@@ -27,6 +27,10 @@ public class MessageController {
     public ResponseEntity<?> sendMessage(@Valid @RequestBody SendMessageRequest request, Authentication authentication) {
         try {
             String senderId = authentication.getName();
+            // only can send direct messages to friends
+            if (!messageService.areFriends(senderId, request.getRecipientId())) {
+                return ResponseEntity.badRequest().body("You can only send messages to friends.");
+            }
             Message message = messageService.sendMessage(senderId, request.getRecipientId(), request.getContent(), "DIRECT");
             return ResponseEntity.ok(message);
         } catch (Exception e) {

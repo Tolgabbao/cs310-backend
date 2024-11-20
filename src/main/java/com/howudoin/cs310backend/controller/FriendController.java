@@ -66,6 +66,8 @@ public class FriendController {
             System.out.println("FriendController: getFriendList: authentication: " + authentication);
             String userId = authentication.getName();
             List<User> friends = friendService.getFriends(userId);
+            // only should have most of friends data in response
+
             return ResponseEntity.ok(friends);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

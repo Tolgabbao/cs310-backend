@@ -4,6 +4,7 @@ package com.howudoin.cs310backend.service;
 
 import com.howudoin.cs310backend.model.User;
 import com.howudoin.cs310backend.repository.UserRepository;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,6 +57,15 @@ public class UserService {
 
     public Optional<User> findById(String userId) {
         return userRepository.findById(userId);
+    }
+
+    public boolean areFriends(String senderId, @NotBlank String recipientId) {
+        Optional<User> sender = userRepository.findById(senderId);
+        Optional<User> recipient = userRepository.findById(recipientId);
+        if (sender.isPresent() && recipient.isPresent()) {
+            return sender.get().getFriendList().contains(recipientId) && recipient.get().getFriendList().contains(senderId);
+        }
+        return false;
     }
 
     // Additional user-related methods
