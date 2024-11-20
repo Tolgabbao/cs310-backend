@@ -3,6 +3,7 @@
 package com.howudoin.cs310backend.controller;
 
 import com.howudoin.cs310backend.model.Group;
+import com.howudoin.cs310backend.model.Message;
 import com.howudoin.cs310backend.service.GroupService;
 import com.howudoin.cs310backend.service.UserService;
 import lombok.Data;
@@ -65,6 +66,16 @@ public class GroupController {
         try {
             List<String> members = groupService.getGroupMembers(groupId);
             return ResponseEntity.ok(members);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("{groupId}/messages")
+    public ResponseEntity<?> getGroupMessages(@PathVariable String groupId, Authentication authentication) {
+        try {
+            List<Message> messages = groupService.getGroupMessages(groupId);
+            return ResponseEntity.ok(messages);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

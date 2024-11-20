@@ -27,7 +27,7 @@ public class MessageController {
     public ResponseEntity<?> sendMessage(@Valid @RequestBody SendMessageRequest request, Authentication authentication) {
         try {
             String senderId = authentication.getName();
-            Message message = messageService.sendMessage(senderId, request.getRecipientId(), request.getContent(), "TEXT");
+            Message message = messageService.sendMessage(senderId, request.getRecipientId(), request.getContent(), "DIRECT");
             return ResponseEntity.ok(message);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

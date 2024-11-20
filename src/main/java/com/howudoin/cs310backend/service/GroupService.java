@@ -3,6 +3,7 @@
 package com.howudoin.cs310backend.service;
 
 import com.howudoin.cs310backend.model.Group;
+import com.howudoin.cs310backend.model.Message;
 import com.howudoin.cs310backend.model.User;
 import com.howudoin.cs310backend.repository.GroupRepository;
 import com.howudoin.cs310backend.repository.UserRepository;
@@ -19,6 +20,9 @@ public class GroupService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private MessageService messageService;
 
     public Group createGroup(String groupName, String createdBy, List<String> memberIds) throws Exception {
         // Validate members
@@ -80,6 +84,10 @@ public class GroupService {
             throw new Exception("You are not a member of this group.");
         }
 
+        messageService.sendMessage(senderId, groupId, content, "GROUP");
+    }
 
+    public List<Message> getGroupMessages(String groupId) {
+        return messageService.getGroupMessages(groupId);
     }
 }

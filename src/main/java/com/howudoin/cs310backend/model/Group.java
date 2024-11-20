@@ -24,5 +24,4 @@ public class Group {
     private List<String> members; // list of userIds
     private Long createdAt;
     private Long updatedAt;
-    private List<Message> messages;
 }

@@ -21,6 +21,6 @@ public class Message {
     private String receiverId; // userId or groupId
     private String content;
     private Long timestamp;
-    private String messageType; // e.g., "TEXT", "IMAGE", etc.
+    private String messageType; // e.g., "DIRECT", "GROUP"
     private String status; // e.g., "SENT", "DELIVERED", "READ"
 }

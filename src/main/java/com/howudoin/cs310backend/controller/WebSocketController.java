@@ -25,7 +25,7 @@ public class WebSocketController {
     @MessageMapping("/send")
     public void sendMessage(@Payload SendMessageRequest request, Authentication authentication) throws Exception {
         String senderId = authentication.getName();
-        Message message = messageService.sendMessage(senderId, request.getRecipientId(), request.getContent(), "TEXT");
+        Message message = messageService.sendMessage(senderId, request.getRecipientId(), request.getContent(), "DIRECT");
 
         // Send to recipient's queue
         messagingTemplate.convertAndSend("/queue/messages/" + request.getRecipientId(), message);
