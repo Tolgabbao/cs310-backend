@@ -27,4 +27,5 @@ public class User {
     private List<String> sentRequests;
     private Long createdAt;
     private Long updatedAt;
+
 }

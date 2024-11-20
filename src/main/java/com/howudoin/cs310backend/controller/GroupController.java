@@ -48,6 +48,18 @@ public class GroupController {
         }
     }
 
+    // send a message to a group
+    @PostMapping("/{groupId}/send")
+    public ResponseEntity<?> sendMessage(@PathVariable String groupId, @Valid @RequestBody SendMessageRequest request, Authentication authentication) {
+        try {
+            String senderId = authentication.getName();
+            groupService.sendMessage(groupId, senderId, request.getContent());
+            return ResponseEntity.ok("Message sent to group.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping("/{groupId}/members")
     public ResponseEntity<?> getGroupMembers(@PathVariable String groupId, Authentication authentication) {
         try {

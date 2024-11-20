@@ -10,7 +10,6 @@ import java.util.List;
 
 @Repository
 public interface MessageRepository extends MongoRepository<Message, String> {
-    List<Message> findByReceiverIdAndSenderIdOrderByTimestampAsc(String userId, String friendId);
-
+    List<Message> findByReceiverIdAndSenderIdOrderByTimestampAsc(String receiverId, String senderId);
     List<Message> findByReceiverIdOrderByTimestampAsc(String groupId);
 }

@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+
 import java.util.List;
 import java.util.UUID;
 
@@ -23,4 +24,5 @@ public class Group {
     private List<String> members; // list of userIds
     private Long createdAt;
     private Long updatedAt;
+    private List<Message> messages;
 }

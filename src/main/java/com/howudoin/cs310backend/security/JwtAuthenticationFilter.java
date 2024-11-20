@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // Extract user ID from the token
                 String userId = jwtUtil.getUserIdFromJwt(jwt);
 
-                // Load user details associated with the user ID
+                // Load user details from the database
                 UserDetails userDetails = customUserDetailsService.loadUserByUsername(userId);
 
                 // Create authentication token
@@ -78,7 +78,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      */
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
-
+        System.out.println("JwtAuthenticationFilter: parseJwt: headerAuth: " + headerAuth);
         // Check if the Authorization header is present and starts with "Bearer "
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
             // Extract and return the token

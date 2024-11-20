@@ -28,8 +28,14 @@ public class MessageService {
     }
 
     public List<Message> getConversation(String userId, String friendId) {
-        // Implement pagination as needed
-        return messageRepository.findByReceiverIdAndSenderIdOrderByTimestampAsc(userId, friendId);
+        // Find messages from both directions
+        System.out.println("Looking up messages between " + userId + " and " + friendId);
+        List<Message> messages1 = messageRepository.findByReceiverIdAndSenderIdOrderByTimestampAsc(userId, friendId);
+        List<Message> messages2 = messageRepository.findByReceiverIdAndSenderIdOrderByTimestampAsc(friendId, userId);
+        messages1.addAll(messages2);
+        messages1.sort((m1, m2) -> m1.getTimestamp().compareTo(m2.getTimestamp()));
+        System.out.println("Found " + messages1.size() + " messages between " + userId + " and " + friendId);
+        return messages1;
     }
 
     public List<Message> getGroupMessages(String groupId) {

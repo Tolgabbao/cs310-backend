@@ -3,10 +3,14 @@ package com.howudoin.cs310backend.security;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Base64;
+import java.security.Key;
 
 /**
  * Utility class for handling JWT operations like token generation and validation.
@@ -27,13 +31,17 @@ public class JwtUtil {
      * @return Generated JWT token.
      */
     public String generateToken(String userId) {
+        byte[] keyBytes = Base64.getDecoder().decode(jwtSecret);
+        Key signingKey = Keys.hmacShaKeyFor(keyBytes);
+
         return Jwts.builder()
                 .setSubject(userId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(signingKey)
                 .compact();
     }
+
 
     /**
      * Extracts the user ID from a JWT token.
@@ -42,7 +50,23 @@ public class JwtUtil {
      * @return User ID.
      */
     public String getUserIdFromJwt(String token) {
-        return ""; // implement later
+        try {
+            // Ensure jwtSecret is Base64-encoded for the signing key
+            byte[] keyBytes = Base64.getDecoder().decode(jwtSecret);
+            Key signingKey = Keys.hmacShaKeyFor(keyBytes);
+
+            // Parse the JWT token and retrieve claims
+            Claims claims = Jwts.parser()
+                    .setSigningKey(signingKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            return claims.getSubject(); // Extract the 'sub' field (userId)
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -53,12 +77,19 @@ public class JwtUtil {
      */
     public boolean validateJwt(String authToken) {
         try {
-            // implement later
+            if (authToken == null || !authToken.contains(".")) {
+                System.out.println("Invalid JWT format: " + authToken); // Debugging line
+                return false;
+            }
+            Jwts.parser()
+                    .setSigningKey(Keys.hmacShaKeyFor(Base64.getDecoder().decode(jwtSecret)))
+                    .build()
+                    .parseClaimsJws(authToken); // Attempt to parse
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            // Log the exception (use a logger in production)
             e.printStackTrace();
+            return false; // Token is invalid
         }
-        return false;
     }
+
 }

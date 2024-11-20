@@ -64,23 +64,7 @@ public class FriendService {
         userRepository.save(user);
         userRepository.save(friend);
     }
-
-    public void rejectFriendRequest(String userId, String friendId) throws Exception {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new Exception("User not found."));
-        User friend = userRepository.findById(friendId)
-                .orElseThrow(() -> new Exception("Friend not found."));
-
-        if (!user.getPendingRequests().contains(friendId)) {
-            throw new Exception("No pending friend request from this user.");
-        }
-
-        user.getPendingRequests().remove(friendId);
-        friend.getSentRequests().remove(userId);
-
-        userRepository.save(user);
-        userRepository.save(friend);
-    }
+    
 
     public List<User> getFriends(String userId) throws Exception {
         User user = userRepository.findById(userId)

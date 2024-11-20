@@ -69,4 +69,17 @@ public class GroupService {
                 .orElseThrow(() -> new Exception("Group not found."));
         return group.getMembers();
     }
+
+    public void sendMessage(String groupId, String senderId, String content) throws Exception {
+        // Validate group
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new Exception("Group not found."));
+
+        // Validate sender
+        if (!group.getMembers().contains(senderId)) {
+            throw new Exception("You are not a member of this group.");
+        }
+
+
+    }
 }
