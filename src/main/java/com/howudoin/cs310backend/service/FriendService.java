@@ -72,4 +72,10 @@ public class FriendService {
         List<String> friendIds = user.getFriendList();
         return userRepository.findAllById(friendIds);
     }
+
+    public List<User> getPendingFriendRequests(String userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        List<String> pendingRequests = user.getPendingRequests();
+        return userRepository.findAllById(pendingRequests);
+    }
 }

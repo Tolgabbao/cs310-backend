@@ -60,6 +60,20 @@ public class FriendController {
         }
     }
 
+    @GetMapping("/pending")
+    public ResponseEntity<?> getPendingFriendRequests(Authentication authentication) {
+        try {
+            String userId = authentication.getName();
+            List<User> pendingRequests = friendService.getPendingFriendRequests(userId);
+            // return the list of emails of users who have sent friend requests to the users
+            // the pendingRequests list should only have the email field but its type is User
+            return ResponseEntity.ok(pendingRequests);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping
     public ResponseEntity<?> getFriendList(Authentication authentication) {
         try {

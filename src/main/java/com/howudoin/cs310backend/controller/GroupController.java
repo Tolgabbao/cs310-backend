@@ -80,6 +80,27 @@ public class GroupController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping
+    public ResponseEntity<?> getGroups(Authentication authentication) {
+        try {
+            String userId = authentication.getName();
+            List<Group> groups = groupService.getGroups(userId);
+            return ResponseEntity.ok(groups);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/details/{groupId}")
+    public ResponseEntity<?> getGroupDetails(@PathVariable String groupId, Authentication authentication) {
+        try {
+            Group group = groupService.getGroupById(groupId);
+            return ResponseEntity.ok(group);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
 
 @Data

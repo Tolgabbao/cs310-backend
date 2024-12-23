@@ -90,4 +90,12 @@ public class GroupService {
     public List<Message> getGroupMessages(String groupId) {
         return messageService.getGroupMessages(groupId);
     }
+
+    public List<Group> getGroups(String userId) {
+        return groupRepository.findAllByMembersContaining(userId);
+    }
+
+    public Group getGroupById(String groupId) {
+        return groupRepository.findById(groupId).orElse(null);
+    }
 }
