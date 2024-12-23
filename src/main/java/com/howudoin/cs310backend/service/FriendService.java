@@ -78,4 +78,10 @@ public class FriendService {
         List<String> pendingRequests = user.getPendingRequests();
         return userRepository.findAllById(pendingRequests);
     }
+
+    public List<User> getSentFriendRequests(String userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        List<String> sentRequests = user.getSentRequests();
+        return userRepository.findAllById(sentRequests);
+    }
 }

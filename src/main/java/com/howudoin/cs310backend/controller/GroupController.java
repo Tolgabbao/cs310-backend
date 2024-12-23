@@ -4,6 +4,7 @@ package com.howudoin.cs310backend.controller;
 
 import com.howudoin.cs310backend.model.Group;
 import com.howudoin.cs310backend.model.Message;
+import com.howudoin.cs310backend.model.User;
 import com.howudoin.cs310backend.service.GroupService;
 import com.howudoin.cs310backend.service.UserService;
 import lombok.Data;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/groups")
@@ -96,7 +98,12 @@ public class GroupController {
     public ResponseEntity<?> getGroupDetails(@PathVariable String groupId, Authentication authentication) {
         try {
             Group group = groupService.getGroupById(groupId);
-            return ResponseEntity.ok(group);
+            // parse the group members to get their details
+            List<String> memberIds = group.getMembers();
+            List<Optional<User>> members = memberIds.stream().map(s -> userService.findById(s)).toList();
+            String adminId = group.getCreatedBy();
+            String adminName = userService.findById(adminId).get().getFirstName() + " " + userService.findById(adminId).get().getLastName();
+            return ResponseEntity.ok(new GroupDetailsResponse(group, members, adminName));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -115,4 +122,17 @@ class CreateGroupRequest {
 class AddMemberRequest {
     @NotBlank
     private String memberId;
+}
+
+@Data
+class GroupDetailsResponse {
+    private Group group;
+    private List<Optional<User>> members;
+    private String adminName;
+
+    public GroupDetailsResponse(Group group, List<Optional<User>> members, String adminName) {
+        this.group = group;
+        this.members = members;
+        this.adminName = adminName;
+    }
 }

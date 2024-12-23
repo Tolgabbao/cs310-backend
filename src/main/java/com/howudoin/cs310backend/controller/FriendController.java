@@ -74,6 +74,19 @@ public class FriendController {
         }
     }
 
+    @GetMapping("/sent")
+    public ResponseEntity<?> getSentFriendRequests(Authentication authentication) {
+        try {
+            String userId = authentication.getName();
+            List<User> sentRequests = friendService.getSentFriendRequests(userId);
+            // return the list of emails of users to whom the users have sent friend requests
+            // the sentRequests list should only have the email field but its type is User
+            return ResponseEntity.ok(sentRequests);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping
     public ResponseEntity<?> getFriendList(Authentication authentication) {
         try {
